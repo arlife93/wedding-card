@@ -121,12 +121,15 @@ section{position:relative}
    HERO
 ================================================================= */
 .hero{
+  position:relative;
   min-height:100svh;min-height:100vh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;color:var(--ivory);overflow:hidden;
   background:
-    radial-gradient(120% 90% at 50% 8%, #14377a 0%, var(--navy) 38%, var(--navy-deep) 78%);
-  padding:90px 22px 140px;
+    linear-gradient(180deg, rgba(8,26,61,.25) 0%, rgba(8,26,61,.55) 100%),
+    url("images/BG1.png") center center / cover no-repeat,
+    var(--navy-deep);
+  padding:60px 22px 80px;
 }
 /* islamic geometric pattern overlay */
 .hero::before{
@@ -139,38 +142,258 @@ section{position:relative}
 .star.g{background:var(--gold-soft)}
 @keyframes twinkle{0%,100%{opacity:.18;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
 
-/* crescent moon */
-/* =================================================================
-   HERO INITIALS (A & M)
-================================================================= */
-/* =================================================================
-   HERO INITIALS (A & M) - IMAGE VERSION
-================================================================= */
-.hero-initial {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: clamp(120px, 22vw, 350px);
-  opacity: 0.35; /* <--- ลองเปลี่ยนเลขตรงนี้ดูครับ เช่น 0.5 หรือ 0.6 ภาพจะชัดขึ้นครับ */
-  z-index: 3;
-  pointer-events: none;
-  user-select: none;
+/* stars */
+#stars{position:absolute;inset:0;z-index:2;pointer-events:none}
+.star{position:absolute;background:#fff;border-radius:50%;opacity:.85;animation:twinkle 3.5s ease-in-out infinite}
+.star.g{background:var(--gold-soft)}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+
+/* glowing particles */
+.hero-particles{position:absolute;inset:0;z-index:2;pointer-events:none}
+.hero-particles span{
+  position:absolute;width:5px;height:5px;border-radius:50%;
+  background:radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
+  filter:blur(.5px);
+  animation:floatParticle 14s linear infinite;
 }
-.initial-a {
-  left: 8vw; /* ระยะห่างจากขอบซ้าย (เลขยิ่งมาก รูปยิ่งขยับเข้าตรงกลาง) */
-}
-.initial-m {
-  right: 8vw; /* ระยะห่างจากขอบขวา */
+.hero-particles span:nth-child(1){left:8%;top:30%;animation-delay:0s}
+.hero-particles span:nth-child(2){left:22%;top:60%;animation-delay:-2s}
+.hero-particles span:nth-child(3){left:38%;top:18%;animation-delay:-4s}
+.hero-particles span:nth-child(4){left:55%;top:70%;animation-delay:-6s}
+.hero-particles span:nth-child(5){left:70%;top:38%;animation-delay:-8s}
+.hero-particles span:nth-child(6){left:82%;top:62%;animation-delay:-10s}
+.hero-particles span:nth-child(7){left:90%;top:25%;animation-delay:-3s}
+.hero-particles span:nth-child(8){left:14%;top:80%;animation-delay:-7s}
+@keyframes floatParticle{
+  0%{transform:translateY(0) scale(.8);opacity:0}
+  20%{opacity:1}
+  80%{opacity:1}
+  100%{transform:translateY(-80px) scale(1.2);opacity:0}
 }
 
-/* ปรับตำแหน่งและขนาดสำหรับหน้าจอมือถือ */
-@media (max-width: 760px) {
-  .hero-initial {
-    width: clamp(90px, 25vw, 160px);
-    opacity: 0.15; /* ในมือถือให้ภาพจางลงอีกนิด จะได้ไม่อ่านข้อความยาก */
-  }
-  .initial-a { left: 4vw; top: 40%; }
-  .initial-m { right: 4vw; top: 60%; }
+/* crescent moon */
+.moon-wrap{
+  position:absolute;top:5%;right:7%;z-index:3;
+  animation:floatY 9s ease-in-out infinite;
+}
+.moon{
+  width:clamp(80px,11vw,150px);height:auto;
+  filter:
+    drop-shadow(0 0 40px rgba(231,205,122,.7))
+    drop-shadow(0 0 80px rgba(231,205,122,.35));
+}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* corner ornaments */
+.hero-corner{
+  position:absolute;z-index:3;pointer-events:none;
+  width:clamp(160px,22vw,300px);height:auto;
+  filter:drop-shadow(0 0 14px rgba(231,205,122,.35));
+}
+.corner-tl{top:0;left:0}
+.corner-tr{top:0;right:0}
+
+/* hanging lanterns */
+.lantern{
+  position:absolute;z-index:3;top:0;
+  width:clamp(40px,5vw,68px);height:auto;
+  filter:drop-shadow(0 0 22px rgba(255,214,128,.55));
+  transform-origin:top center;
+  animation:swing 5s ease-in-out infinite;
+}
+.lantern-left{left:16%}
+.lantern-right{right:16%;animation-delay:-2.5s}
+@keyframes swing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+/* Big monogram A & M */
+/* Big monogram A & M */
+/* Big monogram A & M (image version) */
+.hero-initial{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:clamp(160px,24vw,340px);
+  height:auto;
+  opacity:.95;
+  z-index:3;
+  pointer-events:none;user-select:none;
+  filter:
+    drop-shadow(0 0 25px rgba(231,205,122,.55))
+    drop-shadow(0 0 50px rgba(212,175,55,.3));
+  animation:initialFloat 7s ease-in-out infinite;
+}
+.initial-a{left:10vw;animation-delay:0s}
+.initial-m{right:10vw;animation-delay:-3.5s}
+@keyframes initialFloat{
+  0%,100%{transform:translateY(-50%)}
+  50%{transform:translateY(calc(-50% - 10px))}
+}
+
+/* hero inner content */
+.hero-inner{
+  position:relative;z-index:6;max-width:760px;padding:30px 20px;
+}
+.arch-top{
+  display:block;margin:0 auto 14px;
+  width:clamp(180px,32vw,300px);height:auto;
+  filter:drop-shadow(0 0 12px rgba(231,205,122,.4));
+}
+
+/* Bismillah */
+.bismillah{
+  font-family:var(--f-arabic);
+  font-size:clamp(1.6rem,5.5vw,2.6rem);
+  color:var(--gold-soft);
+  margin-bottom:10px;letter-spacing:.02em;
+  text-shadow:0 0 22px rgba(231,205,122,.35);
+}
+.bismillah-tr{
+  font-family:var(--f-ui);
+  font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--sky-soft);opacity:.85;
+}
+
+/* divider */
+.hero-divider{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:22px auto;color:var(--gold);max-width:420px;
+}
+.hero-divider .line{
+  flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent);
+}
+.hero-divider svg{width:18px;height:18px;filter:drop-shadow(0 0 8px var(--gold))}
+.hero-divider.small{max-width:280px;margin:16px auto}
+.hero-divider.small .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 10px var(--gold);
+}
+
+/* eyebrow inside hero */
+.hero .eyebrow{
+  color:var(--gold);font-size:.78rem;letter-spacing:.5em;
+  margin-bottom:8px;
+}
+
+/* main names */
+.hero h1{
+  font-family:var(--f-display);
+  font-weight:500;font-style:italic;
+  font-size:clamp(2.8rem,11vw,6rem);
+  line-height:1;color:var(--white);
+  margin:6px 0 10px;
+  text-shadow:0 6px 40px rgba(0,0,0,.5), 0 0 30px rgba(231,205,122,.15);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.hero h1 .firstname{display:block}
+.hero h1 .amp{
+  font-family:var(--f-display);font-style:italic;font-weight:400;
+  color:var(--gold);display:block;font-size:.55em;margin:2px 0;
+  text-shadow:0 0 20px rgba(212,175,55,.55);
+}
+
+.hero .thainames{
+  font-family:var(--f-thai);
+  font-size:clamp(1rem,3.6vw,1.4rem);
+  color:var(--sky-soft);
+  letter-spacing:.04em;margin-top:6px;
+}
+.hero .nick{
+  font-family:var(--f-ui);
+  font-size:.82rem;letter-spacing:.36em;text-transform:uppercase;
+  color:var(--gold);margin-top:4px;
+}
+
+/* date pill */
+.hero .datepill{
+  margin-top:30px;display:inline-flex;align-items:center;gap:14px;
+  padding:12px 26px;border:1px solid rgba(212,175,55,.55);border-radius:50px;
+  background:rgba(255,255,255,.06);backdrop-filter:blur(6px);
+  font-family:var(--f-ui);letter-spacing:.24em;font-size:.78rem;
+  text-transform:uppercase;color:var(--ivory);
+  box-shadow:0 0 30px rgba(212,175,55,.18), inset 0 0 20px rgba(255,255,255,.05);
+}
+
+/* mist clouds */
+.hero-mist{
+  position:absolute;left:0;right:0;bottom:0;height:280px;z-index:3;
+  pointer-events:none;
+  background:
+    radial-gradient(60% 80% at 20% 100%, rgba(190,220,255,.15), transparent 70%),
+    radial-gradient(60% 80% at 80% 100%, rgba(190,220,255,.15), transparent 70%),
+    radial-gradient(80% 60% at 50% 100%, rgba(190,220,255,.22), transparent 70%);
+  filter:blur(8px);
+}
+
+/* =================================================================
+   HERO — Image Assets (decorative PNGs)
+================================================================= */
+.hero-asset{
+  display:block;
+  margin:0 auto;
+  max-width:100%;
+  height:auto;
+  filter:drop-shadow(0 4px 18px rgba(0,0,0,.45));
+}
+.hero-asset-title{
+  width:clamp(260px, 50vw, 460px);
+  margin:18px auto 6px;
+}
+.hero-asset-rings{
+  width:clamp(220px, 44vw, 360px);
+  margin:14px auto 8px;
+}
+.hero-asset-date{
+  width:clamp(240px, 42vw, 340px);
+  margin:26px auto 0;
+  filter:drop-shadow(0 0 16px rgba(212,175,55,.25));
+}
+.hero h1 .hero-asset-amp{
+  display:block;
+  margin:6px auto;
+  width:clamp(140px, 24vw, 220px);
+  height:auto;
+  filter:drop-shadow(0 0 10px rgba(231,205,122,.4));
+}
+
+/* Mobile tune */
+@media (max-width:760px){
+  .hero-asset-title{width:78vw;margin:14px auto 4px}
+  .hero-asset-rings{width:70vw;margin:12px auto 6px}
+  .hero-asset-date{width:72vw;margin:22px auto 0}
+  .hero h1 .hero-asset-amp{width:42vw;margin:4px auto}
+}
+
+/* mosque silhouette */
+.mosque{
+  position:absolute;left:0;right:0;bottom:0;z-index:4;width:100%;
+  pointer-events:none;line-height:0;
+}
+.mosque svg{
+  width:100%;height:auto;display:block;
+  filter:drop-shadow(0 -8px 22px rgba(0,0,0,.45));
+}
+
+/* scroll tip */
+.scrolltip{
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:7;
+  color:var(--sky-soft);font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.85;
+}
+.scrolltip span{width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:scrolldot 2.2s ease-in-out infinite}
+@keyframes scrolldot{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ===== Mobile adjust ===== */
+@media (max-width:760px){
+  .hero{padding:60px 16px 160px}
+  .hero-initial{width:clamp(100px,30vw,180px);opacity:.7}
+  .initial-a{left:-2vw;top:42%}
+  .initial-m{right:-2vw;top:58%}
+  .moon-wrap{top:4%;right:5%}
+  .corner-tl,.corner-tr{width:42vw}
+  .lantern-left{left:3%}
+  .lantern-right{right:3%}
+  .hero h1 .amp{font-size:.6em}
+  .hero-mist{height:200px}
+  .hero-particles span{width:3px;height:3px}
 }
 
 .moon{
@@ -482,70 +705,57 @@ section{position:relative}
 </nav>
 
 <!-- ============================ HERO ============================ -->
+<!-- ============================ HERO ============================ -->
 <header class="hero" id="hero">
+  <!-- Stars background -->
   <div id="stars" aria-hidden="true"></div>
-  <!-- ลายน้ำตัวอักษรย่อ A และ M -->
-  <div class="hero-initial initial-a" aria-hidden="true">A</div>
-  <div class="hero-initial initial-m" aria-hidden="true">M</div>
-  <img src="images/initial-a.png" class="hero-initial initial-a" alt="" aria-hidden="true">
-  <img src="images/initial-m.png" class="hero-initial initial-m" alt="" aria-hidden="true">
 
-  <!-- crescent moon -->
-  <svg class="moon" viewBox="0 0 100 100" aria-hidden="true">
-    <defs>
-      <radialGradient id="mg" cx="38%" cy="34%" r="70%">
-        <stop offset="0%" stop-color="#fdf3cf"/><stop offset="60%" stop-color="#e7cd7a"/><stop offset="100%" stop-color="#c9a531"/>
-      </radialGradient>
-    </defs>
-    <path d="M62 6a46 46 0 1 0 0 88 38 38 0 1 1 0-88Z" fill="url(#mg)"/>
-  </svg>
+  <!-- Glowing particles -->
+  <div class="hero-particles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
 
-  <div class="hero-inner">
+  <!-- Big monogram letters A & M -->
+  <img src="images/initial-a.png" alt="" class="hero-initial initial-a" aria-hidden="true">
+  <img src="images/initial-m.png" alt="" class="hero-initial initial-m" aria-hidden="true">
+
+  <!-- Main content with arch frame -->
+    <div class="hero-inner">
+
+    <!-- Bismillah -->
     <p class="bismillah" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-    <p class="bismillah-tr">In the name of Allah, the Most Gracious</p>
+    <p class="bismillah-tr">In the Name of Allah, the Most Gracious</p>
 
-    <div class="divider" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l3 7 7 1-5 5 1.5 7L12 18l-6.5 4L7 15 2 10l7-1z"/></svg>
-    </div>
+    <!-- WEDDING CELEBRATION (image) -->
+    <img src="wedding_assets/wedding-celebration-title.png"
+        alt="Wedding Celebration"
+        class="hero-asset hero-asset-title">
 
-    <p class="eyebrow">The Wedding Celebration Of</p>
-    <h1>Areef<span class="amp">&amp;</span>Robi'ah</h1>
+    <!-- Couple Names -->
+    <h1>
+      <span class="firstname">Areef</span>
+      <img src="wedding_assets/wedding-ampersand-divider.png"
+          alt="and"
+          class="hero-asset-amp">
+      <span class="firstname">Robi'ah</span>
+    </h1>
+
+    <!-- Rings divider (image) -->
+    <img src="wedding_assets/wedding-rings-divider.png"
+        alt=""
+        class="hero-asset hero-asset-rings"
+        aria-hidden="true">
+
+    <!-- Thai names + Walimah -->
     <p class="thainames">อัครพนธ์ ดำรงอัครกุล &nbsp;·&nbsp; มัณฑานา บุญลาภ</p>
     <p class="nick">วาลีมะฮ์ · Walimah</p>
 
-    <div class="datepill">
-      <span>28 . 07 . 2026</span>
-      <span style="color:var(--gold)">✦</span>
-      <span>Ayutthaya</span>
-    </div>
-  </div>
+    <!-- Date badge (image) -->
+    <img src="wedding_assets/wedding-date-badge.png"
+        alt="28.07.2026 Ayutthaya"
+        class="hero-asset hero-asset-date">
 
-  <!-- mosque silhouette -->
-  <div class="mosque" aria-hidden="true">
-    <svg viewBox="0 0 1200 230" preserveAspectRatio="xMidYMax meet">
-      <g fill="#061129">
-        <!-- minaret left -->
-        <rect x="120" y="60" width="16" height="170"/><circle cx="128" cy="56" r="11"/><path d="M128 30l5 18h-10z"/>
-        <!-- minaret right -->
-        <rect x="1064" y="60" width="16" height="170"/><circle cx="1072" cy="56" r="11"/><path d="M1072 30l5 18h-10z"/>
-        <!-- main dome -->
-        <path d="M520 230V150a80 80 0 0 1 160 0v80Z"/>
-        <path d="M600 78l8 30h-16z"/><circle cx="600" cy="74" r="9"/>
-        <!-- side domes -->
-        <path d="M350 230v-50a55 55 0 0 1 110 0v50Z"/><circle cx="405" cy="122" r="7"/>
-        <path d="M740 230v-50a55 55 0 0 1 110 0v50Z"/><circle cx="795" cy="122" r="7"/>
-        <!-- base wall with arches -->
-        <rect x="280" y="190" width="640" height="40"/>
-      </g>
-      <!-- lit windows -->
-      <g fill="#e7cd7a" opacity=".8">
-        <rect x="595" y="170" width="10" height="26" rx="5"/>
-        <rect x="400" y="160" width="9" height="22" rx="4"/>
-        <rect x="790" y="160" width="9" height="22" rx="4"/>
-        <rect x="124" y="120" width="8" height="20" rx="4"/>
-        <rect x="1068" y="120" width="8" height="20" rx="4"/>
-      </g>
-    </svg>
   </div>
 
   <div class="scrolltip" aria-hidden="true"><span></span>Scroll</div>
