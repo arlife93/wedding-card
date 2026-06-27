@@ -381,19 +381,58 @@ section{position:relative}
 .scrolltip span{width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:scrolldot 2.2s ease-in-out infinite}
 @keyframes scrolldot{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-/* ===== Mobile adjust ===== */
-@media (max-width:760px){
-  .hero{padding:60px 16px 160px}
-  .hero-initial{width:clamp(100px,30vw,180px);opacity:.7}
-  .initial-a{left:-2vw;top:42%}
-  .initial-m{right:-2vw;top:58%}
-  .moon-wrap{top:4%;right:5%}
-  .corner-tl,.corner-tr{width:42vw}
-  .lantern-left{left:3%}
-  .lantern-right{right:3%}
-  .hero h1 .amp{font-size:.6em}
-  .hero-mist{height:200px}
-  .hero-particles span{width:3px;height:3px}
+/* =================================================================
+   MOBILE-ONLY BACKGROUNDS (≤ 767px)
+   ใช้รูป portrait ที่ออกแบบมาสำหรับมือถือโดยเฉพาะ
+================================================================= */
+@media (max-width: 767px){
+
+  /* Hero — BG1_mobile (มัสยิดด้านล่าง + ซุ้มด้านบน) */
+  .hero{
+    background:
+      linear-gradient(180deg, rgba(8,26,61,.15) 0%, rgba(8,26,61,.45) 100%),
+      url("wedding_assets/mobile_wedding/BG1_mobile.png") center center / cover no-repeat,
+      var(--navy-deep) !important;
+  }
+
+  /* Couple — BDP3_mobile */
+  .couple-sec{
+    background:
+      linear-gradient(180deg, rgba(8,26,61,.50) 0%, rgba(8,26,61,.30) 50%, rgba(8,26,61,.50) 100%),
+      url("wedding_assets/mobile_wedding/BDP3_mobile.png") center center / cover no-repeat,
+      var(--navy-deep) !important;
+  }
+
+  /* Family / Countdown / Location — BDP1_mobile */
+  #family,
+  #count,
+  #location{
+    background:
+      linear-gradient(180deg, rgba(8,26,61,.50) 0%, rgba(8,26,61,.32) 50%, rgba(8,26,61,.50) 100%),
+      url("wedding_assets/mobile_wedding/BDP1_mobile.png") center center / cover no-repeat,
+      var(--navy-deep) !important;
+  }
+
+  /* Dress / Gallery / Contact — BDP2_mobile */
+  #dress,
+  #gallery,
+  #contact{
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.25) 50%, rgba(255,255,255,.45) 100%),
+      url("wedding_assets/mobile_wedding/BDP2_mobile.png") center center / cover no-repeat !important;
+  }
+
+  /* ปิด parallax fixed บนมือถือ (iOS/Android ไม่รองรับเสถียร) */
+  .hero,
+  .couple-sec,
+  #family,
+  #count,
+  #location,
+  #dress,
+  #gallery,
+  #contact{
+    background-attachment:scroll !important;
+  }
 }
 
 .moon{
@@ -1364,6 +1403,9 @@ section{position:relative}
           <div class="slide g1" data-cap="Our Story 01"><img src="images/gallery-1.jpg" alt="Our Story 1"></div>
           <div class="slide g2" data-cap="Our Story 02"><img src="images/gallery-2.jpg" alt="Our Story 2"></div>
           <div class="slide g3" data-cap="Our Story 03"><img src="images/gallery-3.jpg" alt="Our Story 3"></div>
+          <div class="slide g3" data-cap="Our Story 03"><img src="images/gallery-4.jpg" alt="Our Story 4"></div>
+          <div class="slide g3" data-cap="Our Story 03"><img src="images/gallery-5.jpg" alt="Our Story 5"></div>
+          <div class="slide g3" data-cap="Our Story 03"><img src="images/gallery-6.jpg" alt="Our Story 6"></div>
         </div>
         <button class="nav-btn prev" id="gPrev" aria-label="ภาพก่อนหน้า">‹</button>
         <button class="nav-btn next" id="gNext" aria-label="ภาพถัดไป">›</button>
