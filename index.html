@@ -662,6 +662,60 @@ section{position:relative}
 
 /* ทำให้ content อยู่เหนือ overlay */
 .couple-sec > *{position:relative;z-index:1}
+/* =================================================================
+   MOBILE-ONLY BACKGROUNDS (≤ 767px)
+   - Desktop/iPad ใช้ BG เดิม (BDP1, BDP2, BDP3, BG1)
+   - Mobile ใช้รูป portrait ที่ออกแบบมาเฉพาะ
+================================================================= */
+@media (max-width: 767px){
+
+  /* Hero — BG1_mobile */
+  .hero{
+    background:
+      linear-gradient(180deg, rgba(8,26,61,.18) 0%, rgba(8,26,61,.50) 100%),
+      url("wedding_assets/mobile_wedding/BG1_mobile.png") center top / cover no-repeat,
+      var(--navy-deep);
+  }
+
+  /* Couple — BDP3_mobile */
+  .couple-sec{
+    background:
+      linear-gradient(180deg, rgba(8,26,61,.50) 0%, rgba(8,26,61,.30) 50%, rgba(8,26,61,.50) 100%),
+      url("wedding_assets/mobile_wedding/BDP3_mobile.png") center center / cover no-repeat,
+      var(--navy-deep);
+  }
+
+  /* Family / Countdown / Location — BDP1_mobile */
+  #family,
+  #count,
+  #location{
+    background:
+      linear-gradient(180deg, rgba(8,26,61,.50) 0%, rgba(8,26,61,.32) 50%, rgba(8,26,61,.50) 100%),
+      url("wedding_assets/mobile_wedding/BDP1_mobile.png") center center / cover no-repeat,
+      var(--navy-deep);
+  }
+
+  /* Dress / Gallery / Contact — BDP2_mobile */
+  #dress,
+  #gallery,
+  #contact{
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.50) 0%, rgba(255,255,255,.30) 50%, rgba(255,255,255,.50) 100%),
+      url("wedding_assets/mobile_wedding/BDP2_mobile.png") center center / cover no-repeat;
+  }
+
+  /* Mobile ปิด parallax fixed (iOS/Android ไม่รองรับเสถียร) */
+  .hero,
+  .couple-sec,
+  #family,
+  #count,
+  #location,
+  #dress,
+  #gallery,
+  #contact{
+    background-attachment:scroll !important;
+  }
+}
 
 .couple-photo{position:relative;max-width:430px;width:100%;margin:0 auto 46px;z-index:2;
   border-radius:18px;overflow:hidden;border:2px solid var(--gold);
