@@ -436,7 +436,109 @@ section{position:relative}
 ================================================================= */
 .panel{background:linear-gradient(180deg,var(--paper),#eef3fb);color:var(--ink);padding:96px 0}
 .panel.alt{background:linear-gradient(180deg,#eef3fb,var(--paper))}
+/* =================================================================
+   BDP2 — background สำหรับ Dress Code / Gallery / Contact
+================================================================= */
+#dress,
+#gallery,
+#contact{
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.35) 50%, rgba(255,255,255,.55) 100%),
+    url("wedding_assets/BDP2.png") center center / cover no-repeat;
+  background-attachment:scroll;
+}
+
+/* ทำให้รูปดูนิ่งเป็นชั้น ๆ บน desktop (parallax effect) */
+@media (min-width: 1024px){
+  #dress,
+  #gallery,
+  #contact{
+    background-attachment:fixed;
+  }
+}
+
+/* faint shimmer particles ทับเล็กน้อยให้ดู luxury */
+#dress::before,
+#gallery::before,
+#contact::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(212,175,55,.08), transparent 35%),
+    radial-gradient(circle at 85% 75%, rgba(212,175,55,.06), transparent 35%);
+  z-index:0;
+}
+
+/* ให้ content ลอยเหนือ overlay */
+#dress > *,
+#gallery > *,
+#contact > *{
+  position:relative;z-index:1;
+}
+
+/* เพิ่ม contrast ให้หัวข้อ section อ่านง่ายบนพื้นฟ้าอ่อน */
+#dress .sec-head .eyebrow,
+#gallery .sec-head .eyebrow,
+#contact .sec-head .eyebrow{
+  color:var(--navy);
+  text-shadow:0 1px 2px rgba(255,255,255,.6);
+}
+#dress .sec-head .thai-sub,
+#gallery .sec-head .thai-sub,
+#contact .sec-head .thai-sub{
+  color:#3a4d70;
+  text-shadow:0 1px 2px rgba(255,255,255,.5);
+}
 .dark{background:radial-gradient(120% 120% at 50% 0%,var(--navy) 0%,var(--navy-deep) 80%);color:var(--ivory);padding:96px 0}
+/* =================================================================
+   BDP1 — background สำหรับ Family / Countdown / Location
+================================================================= */
+#family,
+#count,
+#location{
+  position:relative;
+  background:
+    linear-gradient(180deg, rgba(8,26,61,.55) 0%, rgba(8,26,61,.40) 50%, rgba(8,26,61,.55) 100%),
+    url("wedding_assets/BDP1.png") center center / cover no-repeat,
+    var(--navy-deep);
+  background-attachment:scroll;
+}
+
+/* parallax effect บน desktop เท่านั้น (มือถือไม่รองรับ fixed ดี) */
+@media (min-width: 1024px){
+  #family,
+  #count,
+  #location{
+    background-attachment:fixed;
+  }
+}
+
+/* gold particles ลอยบาง ๆ เพิ่ม luxury */
+#family::before,
+#count::before,
+#location::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(212,175,55,.10), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(212,175,55,.08), transparent 40%);
+  z-index:0;
+}
+
+/* ให้ content อยู่เหนือ overlay */
+#family > *,
+#count > *,
+#location > *{
+  position:relative;z-index:1;
+}
+
+/* เพิ่ม contrast ให้การ์ดในใน sections อ่านง่ายขึ้น */
+#family .ticket,
+#family .card,
+#family > .wrap > div,
+#count .wrap,
+#location .wrap{
+  position:relative;z-index:1;
+}
 .sec-head{text-align:center;margin-bottom:54px}
 .sec-head h2{font-family:var(--f-display);font-weight:600;font-size:clamp(2.2rem,7vw,3.6rem);line-height:1.04;color:var(--navy)}
 .dark .sec-head h2{color:var(--white)}
