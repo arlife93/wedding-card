@@ -446,7 +446,15 @@ section{position:relative}
 /* =================================================================
    BOARDING PASS
 ================================================================= */
-.bp-section{background:radial-gradient(120% 120% at 50% -10%,var(--navy-soft),var(--navy-deep));padding:96px 0 110px}
+.bp-section{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg, rgba(8,26,61,.08) 0%, rgba(8,26,61,.30) 100%),
+    url("wedding_assets/BDP1.png") center center / cover no-repeat,
+    var(--navy-deep);
+  padding:96px 0 110px;
+}
 .ticket{
   position:relative;max-width:880px;margin:0 auto;
   display:grid;grid-template-columns:1fr 250px;
