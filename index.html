@@ -268,7 +268,7 @@ body.fade-out{opacity:0;pointer-events:none}
       </div>
     </div>
     <button class="enter-btn" type="submit">Enter Invitation</button>
-    <p class="form-note">ระบบจะบันทึกข้อมูลไว้ในเครื่องของผู้เปิด แล้วไปหน้าหลัก</p>
+    <p class="form-note" id="formStatus">ระบบจะส่งคำอวยพรให้คู่บ่าวสาว แล้วไปหน้าหลัก</p>
   </form>
 </main>
 
@@ -282,19 +282,49 @@ body.fade-out{opacity:0;pointer-events:none}
 (function(){
   "use strict";
 
-  var OPEN_ANIMATION_MS = 1100;
-  var FADE_MS = 850;
-  var body = document.body;
-  var openBtn = document.getElementById("openBtn");
-  var guestForm = document.getElementById("guestForm");
-  var guestName = document.getElementById("guestName");
-  var guestWish = document.getElementById("guestWish");
-  var opened = false;
+  /*
+    ==================================================
+    PRODUCTION CONFIG
+    ==================================================
+    วาง Google Apps Script Web App URL ตรงนี้
+    URL เดียวกับที่ใช้ใน admin-wishes.html
+  */
+  const WISH_API_URL = "https://script.google.com/macros/s/AKfycby4UJM00cV1fBLEAEoNTOXcju1orersFTZbRBOjDDLjpaZk6r-p0GGZ2-P485i4RFXZNw/exec";
+
+  const OPEN_ANIMATION_MS = 1100;
+  const FADE_MS = 850;
+
+  const body = document.body;
+  const openBtn = document.getElementById("openBtn");
+  const guestForm = document.getElementById("guestForm");
+  const guestName = document.getElementById("guestName");
+  const guestWish = document.getElementById("guestWish");
+  const formStatus = document.getElementById("formStatus");
+
+  let opened = false;
+  let submitting = false;
+
+  function isConfigured(){
+    return WISH_API_URL && !WISH_API_URL.includes("PUT_GOOGLE_APPS_SCRIPT");
+  }
+
+  function setStatus(message){
+    if(formStatus) formStatus.textContent = message;
+  }
+
+  function goMain(){
+    body.classList.add("fade-out");
+    setTimeout(function(){
+      window.location.href = "main.html";
+    }, FADE_MS);
+  }
 
   openBtn.addEventListener("click", function(){
     if (opened) return;
     opened = true;
+
     body.classList.add("opening");
+
     setTimeout(function(){
       body.classList.add("show-form");
       guestName.focus({preventScroll:true});
@@ -303,18 +333,44 @@ body.fade-out{opacity:0;pointer-events:none}
 
   guestForm.addEventListener("submit", function(e){
     e.preventDefault();
-    var name = guestName.value.trim();
-    var wish = guestWish.value.trim();
-    if (!name || !wish) return;
+    if(submitting) return;
+
+    const name = guestName.value.trim();
+    const wish = guestWish.value.trim();
+
+    if (!name || !wish) {
+      setStatus("กรุณากรอกชื่อผู้ร่วมงานและคำอวยพรก่อนเข้าสู่หน้าหลัก");
+      return;
+    }
+
+    if (!isConfigured()) {
+      setStatus("ยังไม่ได้ตั้งค่า Google Apps Script URL กรุณาติดต่อเจ้าภาพ");
+      return;
+    }
+
+    submitting = true;
+    setStatus("กำลังส่งคำอวยพร...");
 
     localStorage.setItem("weddingGuestName", name);
     localStorage.setItem("weddingGuestWish", wish);
     localStorage.setItem("weddingGuestSubmittedAt", new Date().toISOString());
 
-    body.classList.add("fade-out");
-    setTimeout(function(){
-      window.location.href = "main.html";
-    }, FADE_MS);
+    fetch(WISH_API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        action: "submit",
+        guestName: name,
+        wishMessage: wish,
+        source: "index.html"
+      })
+    }).finally(function(){
+      setStatus("ส่งคำอวยพรแล้ว กำลังเข้าสู่หน้าหลัก...");
+      setTimeout(goMain, 450);
+    });
   });
 })();
 </script>

@@ -14,7 +14,7 @@
 */
 
 const SHEET_NAME = "Wishes";
-const ADMIN_KEY = "CHANGE_THIS_ADMIN_KEY";
+const ADMIN_KEY = "AM28072026";
 
 function doGet(e) {
   const action = String((e && e.parameter && e.parameter.action) || "list").toLowerCase();
