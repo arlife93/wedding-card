@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#081A3D" />
-<title>Akkharaphon & Mantana — Nikah Invitation</title>
-<meta name="description" content="ขอเชิญร่วมเป็นเกียรติในพิธีนิกะห์ อัครพนธ์ & มัณฑานา · 28 กรกฎาคม 2569" />
+<meta name="theme-color" content="#071832" />
+<title>Akkharaphon & Mantana — Wedding Invitation</title>
+<meta name="description" content="Wedding Invitation · 28 July 2026" />
 
-<!-- Preload เพื่อให้หน้า Intro เปิดลื่น -->
 <link rel="prefetch" href="./main.html" as="document" />
-<link rel="preload" as="image" href="./assets/intro-bg.png" />
+<link rel="preload" as="image" href="./assets/intro-bg-desktop.png" />
+<link rel="preload" as="image" href="./assets/intro-bg-mobile.png" />
 <link rel="preload" as="image" href="./assets/envelope-closed.png" />
-<link rel="preload" as="image" href="./assets/envelope-open.png" />
+<link rel="preload" as="image" href="./assets/envelope-open-transparent.png" />
 
 <style>
 :root{
@@ -20,189 +20,123 @@
   --gold:#D4AF37;
   --gold-soft:#F0D98A;
   --ivory:#F7F1DF;
+  --cream:#fff7e7;
   --white:#fff;
-  --env-w:clamp(300px,78vw,650px);
+  --ink:#10213f;
+  --env-w:clamp(310px,62vw,620px);
   --f-display:Georgia,"Times New Roman",serif;
   --f-ui:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
   --f-thai:"Leelawadee UI",Tahoma,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%;overflow:hidden}
+html,body{width:100%;min-height:100%}
 body{
-  min-height:100vh;
-  min-height:100svh;
+  min-height:100vh;min-height:100svh;
   background:var(--navy-deep);
   color:var(--ivory);
   font-family:var(--f-ui);
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
   transition:opacity .85s ease;
 }
 
 /* =========================
-   BACKGROUND
+   BACKGROUND PC / MOBILE
 ========================= */
 .bg-layer{
-  position:fixed;
-  inset:0;
-  z-index:0;
+  position:fixed;inset:0;z-index:0;
   background:
-    radial-gradient(circle at 50% 18%,rgba(255,255,255,.18),transparent 25%),
-    linear-gradient(180deg,rgba(4,12,30,.14),rgba(4,12,30,.58)),
-    url("./assets/intro-bg.png") center center / cover no-repeat,
+    radial-gradient(circle at 50% 17%,rgba(255,255,255,.20),transparent 24%),
+    linear-gradient(180deg,rgba(4,12,30,.08),rgba(4,12,30,.54)),
+    url("./assets/intro-bg-desktop.png") center center / cover no-repeat,
     var(--navy-deep);
 }
 .bg-layer::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
+  content:"";position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(circle at 50% 50%,transparent 0 45%,rgba(0,0,0,.28) 100%),
-    linear-gradient(90deg,rgba(0,0,0,.20),transparent 20% 80%,rgba(0,0,0,.20));
+    radial-gradient(circle at 50% 52%,transparent 0 45%,rgba(0,0,0,.32) 100%),
+    linear-gradient(90deg,rgba(0,0,0,.22),transparent 20% 80%,rgba(0,0,0,.22));
+}
+@media (max-width:767px){
+  :root{--env-w:clamp(290px,88vw,430px)}
+  .bg-layer{
+    background:
+      radial-gradient(circle at 50% 13%,rgba(255,255,255,.18),transparent 25%),
+      linear-gradient(180deg,rgba(4,12,30,.05),rgba(4,12,30,.56)),
+      url("./assets/intro-bg-mobile.png") center center / cover no-repeat,
+      var(--navy-deep);
+  }
 }
 
-/* decorative PNG layers — โปร่งใสจริง วางทับได้ */
+/* Decorative layers. They are intentionally subtle because the new backgrounds already contain floral framing. */
 .decor-layer{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  pointer-events:none;
-  user-select:none;
+  position:fixed;inset:0;width:100%;height:100%;object-fit:cover;
+  pointer-events:none;user-select:none;
 }
-.frame-a{z-index:1;opacity:.18;animation:frameFloatA 9s ease-in-out infinite}
-.frame-b{z-index:1;opacity:.12;animation:frameFloatB 11s ease-in-out infinite}
-.frame-c{z-index:1;opacity:.10;animation:frameFloatC 13s ease-in-out infinite}
-.birds-layer{
-  z-index:5;
-  opacity:.42;
-  animation:birdsDrift 8s ease-in-out infinite;
-}
-
-/* ใช้ GIF เป็น ambient movement แบบบาง ๆ */
-.motion-layer{
-  z-index:2;
-  opacity:.12;
-  animation:softPulse 6s ease-in-out infinite;
-}
+.frame-a{z-index:1;opacity:.08;mix-blend-mode:screen;animation:frameFloatA 10s ease-in-out infinite}
+.frame-b{z-index:1;opacity:.06;mix-blend-mode:screen;animation:frameFloatB 12s ease-in-out infinite}
+.frame-c{z-index:1;opacity:.05;mix-blend-mode:screen;animation:frameFloatC 14s ease-in-out infinite}
+.birds-layer{z-index:4;opacity:.18;mix-blend-mode:screen;animation:birdsDrift 8s ease-in-out infinite}
+.motion-layer{z-index:2;opacity:.06;mix-blend-mode:screen;animation:softPulse 6s ease-in-out infinite}
 
 /* =========================
-   CONTENT STAGE
+   MAIN STAGE
 ========================= */
 .intro-stage{
-  position:relative;
-  z-index:10;
-  min-height:100vh;
-  min-height:100svh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(16px,4vh,34px);
-  padding:clamp(26px,5vh,52px) 18px;
+  position:relative;z-index:10;
+  min-height:100vh;min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(18px,3.8vh,32px);
+  padding:clamp(28px,5vh,56px) 16px;
   text-align:center;
 }
 
-.intro-heading{
-  animation:fadeUp 1s cubic-bezier(.16,1,.3,1) both;
-  text-shadow:0 8px 34px rgba(0,0,0,.55);
-}
-.eyebrow{
-  display:block;
-  margin-bottom:7px;
-  color:var(--gold-soft);
-  font-size:.72rem;
-  letter-spacing:.42em;
-  text-transform:uppercase;
-}
-.couple-names{
-  font-family:var(--f-display);
-  font-size:clamp(1.8rem,5vw,3.1rem);
-  font-style:italic;
-  font-weight:600;
-  line-height:1.05;
-}
-.couple-names .amp{color:var(--gold);font-style:normal}
-.date-line{
-  display:block;
-  margin-top:8px;
-  color:var(--gold-soft);
-  font-size:.78rem;
-  letter-spacing:.25em;
-}
+/* No top heading by design */
+.intro-heading{display:none!important}
 
-/* =========================
-   ENVELOPE
-========================= */
 .envelope-zone{
   position:relative;
   width:var(--env-w);
-  max-width:92vw;
+  max-width:94vw;
   perspective:1300px;
-  animation:fadeUp 1.15s cubic-bezier(.16,1,.3,1) .12s both;
+  animation:fadeUp 1.05s cubic-bezier(.16,1,.3,1) both;
 }
 .glow{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:122%;
-  aspect-ratio:1;
+  position:absolute;left:50%;top:50%;width:122%;aspect-ratio:1;
   transform:translate(-50%,-50%);
-  border-radius:50%;
+  border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(212,175,55,.42),rgba(212,175,55,.12) 32%,transparent 68%);
-  filter:blur(8px);
-  opacity:.42;
-  pointer-events:none;
+  filter:blur(9px);opacity:.42;
 }
 .opening .glow{animation:glowPulse 1.45s ease-in-out infinite}
 
 .envelope-wrap{
   position:relative;
   width:100%;
+  min-height:clamp(250px,48vw,560px);
   transform-style:preserve-3d;
   animation:floatEnvelope 5.5s ease-in-out infinite;
 }
 .env{
-  display:block;
-  width:100%;
-  height:auto;
-  backface-visibility:hidden;
-  filter:
-    drop-shadow(0 32px 45px rgba(2,8,24,.62))
-    drop-shadow(0 0 24px rgba(212,175,55,.16));
+  position:absolute;left:50%;top:50%;display:block;height:auto;
+  backface-visibility:hidden;user-select:none;
+  filter:drop-shadow(0 32px 45px rgba(2,8,24,.62)) drop-shadow(0 0 24px rgba(212,175,55,.16));
 }
+.env-closed{width:78%;transform:translate(-50%,-50%)}
 .env-open{
-  position:absolute;
-  left:0;
-  top:0;
-  opacity:0;
-  transform:translateY(18px) scale(.95) rotateX(10deg);
-  pointer-events:none;
+  width:100%;opacity:0;pointer-events:none;
+  transform:translate(-50%,-48%) translateY(18px) scale(.94) rotateX(10deg);
 }
 .opening .env-closed{
-  opacity:0;
-  transform:scale(.90) translateY(-8px) rotateX(-8deg);
+  opacity:0;transform:translate(-50%,-50%) scale(.90) translateY(-8px) rotateX(-8deg);
   transition:opacity .45s ease,transform .55s cubic-bezier(.16,1,.3,1);
 }
 .opening .env-open{
-  opacity:1;
-  animation:openBounce 1.08s cubic-bezier(.34,1.56,.64,1) forwards;
+  opacity:1;animation:openBounce 1.1s cubic-bezier(.34,1.56,.64,1) forwards;
 }
-
-/* Sparkle ตอนกด Open */
-.sparkle-burst{
-  position:absolute;
-  inset:-14%;
-  z-index:4;
-  pointer-events:none;
-  opacity:0;
-}
-.sparkle-burst::before,
-.sparkle-burst::after{
-  content:"";
-  position:absolute;
-  inset:0;
+.sparkle-burst{position:absolute;inset:-12%;z-index:4;pointer-events:none;opacity:0}
+.sparkle-burst::before,.sparkle-burst::after{
+  content:"";position:absolute;inset:0;
   background:
     radial-gradient(circle at 20% 25%,rgba(255,245,192,.95) 0 2px,transparent 4px),
     radial-gradient(circle at 72% 18%,rgba(255,245,192,.9) 0 2px,transparent 4px),
@@ -212,104 +146,87 @@ body{
 }
 .opening .sparkle-burst{animation:sparkleBurst 1.8s ease-out forwards}
 
-/* =========================
-   BUTTON
-========================= */
-.open-btn{
-  position:relative;
-  z-index:11;
-  min-height:50px;
-  padding:15px 44px;
-  border:0;
-  border-radius:999px;
-  cursor:pointer;
-  font-family:var(--f-ui);
-  font-size:clamp(.82rem,2.6vw,.96rem);
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#071832;
+.open-btn,.enter-btn{
+  min-height:50px;padding:15px 42px;border:0;border-radius:999px;cursor:pointer;
+  font-family:var(--f-ui);font-size:clamp(.82rem,2.5vw,.95rem);font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;color:#071832;
   background:linear-gradient(135deg,#fff2bb 0%,var(--gold-soft) 22%,var(--gold) 62%,#a77d19 100%);
-  box-shadow:
-    0 20px 40px -14px rgba(212,175,55,.85),
-    inset 0 2px 0 rgba(255,255,255,.52),
-    inset 0 -2px 0 rgba(110,78,8,.32);
-  animation:fadeUp 1.1s cubic-bezier(.16,1,.3,1) .24s both,buttonGlow 2.6s ease-in-out infinite;
+  box-shadow:0 20px 40px -14px rgba(212,175,55,.85),inset 0 2px 0 rgba(255,255,255,.52),inset 0 -2px 0 rgba(110,78,8,.32);
   transition:transform .28s ease,opacity .28s ease,filter .28s ease;
 }
-.open-btn:hover{transform:translateY(-3px);filter:brightness(1.04)}
-.open-btn:active{transform:translateY(0) scale(.98)}
-.opening .open-btn{
-  opacity:0;
-  pointer-events:none;
-  transform:translateY(10px) scale(.96);
-}
+.open-btn{position:relative;z-index:11;animation:fadeUp 1.1s cubic-bezier(.16,1,.3,1) .18s both,buttonGlow 2.6s ease-in-out infinite}
+.open-btn:hover,.enter-btn:hover{transform:translateY(-3px);filter:brightness(1.04)}
+.open-btn:active,.enter-btn:active{transform:translateY(0) scale(.98)}
+.opening .open-btn{opacity:0;pointer-events:none;transform:translateY(10px) scale(.96)}
 
-/* =========================
-   ANIMATION
-========================= */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(18px)}
-  to{opacity:1;transform:translateY(0)}
+/* Guest form after opening */
+.guest-panel{
+  position:relative;z-index:12;
+  width:min(92vw,560px);
+  padding:18px 18px 20px;
+  border:1px solid rgba(212,175,55,.45);
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,248,229,.94),rgba(246,234,196,.90));
+  color:var(--ink);
+  box-shadow:0 25px 60px -24px rgba(0,0,0,.60),0 0 36px -14px rgba(212,175,55,.62),inset 0 1px 0 rgba(255,255,255,.75);
+  opacity:0;transform:translateY(18px) scale(.97);
+  pointer-events:none;
+  max-height:0;overflow:hidden;
+  transition:opacity .55s ease,transform .55s cubic-bezier(.16,1,.3,1),max-height .65s ease;
 }
-@keyframes floatEnvelope{
-  0%,100%{transform:translateY(0) rotateZ(0deg)}
-  50%{transform:translateY(-10px) rotateZ(-.45deg)}
+.show-form .guest-panel{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;max-height:520px}
+.form-title{
+  font-family:var(--f-display);font-size:1.55rem;font-style:italic;color:var(--navy);line-height:1.1;margin-bottom:4px;
 }
+.form-sub{font-family:var(--f-thai);font-size:.9rem;color:#655530;margin-bottom:14px}
+.form-grid{display:grid;gap:10px;text-align:left}
+.form-field label{
+  display:block;font-family:var(--f-thai);font-size:.82rem;font-weight:700;color:#24385c;margin:0 0 5px 4px;
+}
+.form-field input,.form-field textarea{
+  width:100%;border:1px solid rgba(10,42,90,.20);border-radius:14px;background:rgba(255,255,255,.86);
+  padding:12px 14px;font-family:var(--f-thai);font-size:1rem;color:var(--ink);outline:none;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.06);
+}
+.form-field textarea{min-height:86px;resize:vertical}
+.form-field input:focus,.form-field textarea:focus{border-color:rgba(212,175,55,.85);box-shadow:0 0 0 3px rgba(212,175,55,.18)}
+.enter-btn{width:100%;margin-top:12px;letter-spacing:.10em}
+.form-note{margin-top:8px;font-size:.72rem;color:#76683f;text-align:center;font-family:var(--f-thai)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floatEnvelope{0%,100%{transform:translateY(0) rotateZ(0deg)}50%{transform:translateY(-10px) rotateZ(-.45deg)}}
 @keyframes openBounce{
-  0%{opacity:0;transform:translateY(18px) scale(.92) rotateX(10deg)}
-  54%{opacity:1;transform:translateY(-13px) scale(1.035) rotateX(-4deg)}
-  78%{transform:translateY(3px) scale(.995) rotateX(1deg)}
-  100%{opacity:1;transform:translateY(0) scale(1) rotateX(0deg)}
+  0%{opacity:0;transform:translate(-50%,-48%) translateY(18px) scale(.92) rotateX(10deg)}
+  54%{opacity:1;transform:translate(-50%,-50%) translateY(-13px) scale(1.035) rotateX(-4deg)}
+  78%{transform:translate(-50%,-50%) translateY(3px) scale(.995) rotateX(1deg)}
+  100%{opacity:1;transform:translate(-50%,-50%) translateY(0) scale(1) rotateX(0deg)}
 }
-@keyframes birdsDrift{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(-1.2%,-1.4%,0) scale(1.015)}
-}
-@keyframes frameFloatA{
-  0%,100%{transform:translate3d(0,0,0) rotateX(0deg) scale(1)}
-  50%{transform:translate3d(.5%,-.7%,0) rotateX(1deg) scale(1.015)}
-}
-@keyframes frameFloatB{
-  0%,100%{transform:translate3d(0,0,0) rotateZ(0deg) scale(1)}
-  50%{transform:translate3d(-.6%,.5%,0) rotateZ(.25deg) scale(1.01)}
-}
-@keyframes frameFloatC{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(.4%,.8%,0) scale(1.012)}
-}
-@keyframes glowPulse{
-  0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}
-  50%{opacity:.86;transform:translate(-50%,-50%) scale(1.13)}
-}
-@keyframes sparkleBurst{
-  0%{opacity:0;transform:scale(.9)}
-  20%{opacity:1}
-  100%{opacity:0;transform:scale(1.18)}
-}
-@keyframes softPulse{
-  0%,100%{opacity:.08}
-  50%{opacity:.14}
-}
-@keyframes buttonGlow{
-  0%,100%{box-shadow:0 20px 40px -14px rgba(212,175,55,.72),inset 0 2px 0 rgba(255,255,255,.52),inset 0 -2px 0 rgba(110,78,8,.32)}
-  50%{box-shadow:0 22px 48px -12px rgba(212,175,55,.95),0 0 20px rgba(255,241,173,.22),inset 0 2px 0 rgba(255,255,255,.58),inset 0 -2px 0 rgba(110,78,8,.32)}
-}
+@keyframes birdsDrift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-1.2%,-1.4%,0) scale(1.015)}}
+@keyframes frameFloatA{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(.5%,-.7%,0) scale(1.015)}}
+@keyframes frameFloatB{0%,100%{transform:translate3d(0,0,0) rotateZ(0deg) scale(1)}50%{transform:translate3d(-.6%,.5%,0) rotateZ(.25deg) scale(1.01)}}
+@keyframes frameFloatC{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(.4%,.8%,0) scale(1.012)}}
+@keyframes glowPulse{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}50%{opacity:.86;transform:translate(-50%,-50%) scale(1.13)}}
+@keyframes sparkleBurst{0%{opacity:0;transform:scale(.9)}20%{opacity:1}100%{opacity:0;transform:scale(1.18)}}
+@keyframes softPulse{0%,100%{opacity:.04}50%{opacity:.09}}
+@keyframes buttonGlow{0%,100%{box-shadow:0 20px 40px -14px rgba(212,175,55,.72),inset 0 2px 0 rgba(255,255,255,.52),inset 0 -2px 0 rgba(110,78,8,.32)}50%{box-shadow:0 22px 48px -12px rgba(212,175,55,.95),0 0 20px rgba(255,241,173,.22),inset 0 2px 0 rgba(255,255,255,.58),inset 0 -2px 0 rgba(110,78,8,.32)}}
 body.fade-out{opacity:0;pointer-events:none}
 
-/* =========================
-   RESPONSIVE
-========================= */
 @media (max-width:520px){
-  :root{--env-w:clamp(280px,88vw,430px)}
-  .intro-stage{gap:20px;padding-inline:14px}
+  .intro-stage{gap:16px;padding-inline:14px;justify-content:center}
+  .envelope-wrap{min-height:clamp(300px,94vw,440px)}
+  .env-closed{width:88%}
   .open-btn{width:min(88vw,320px);padding-inline:20px}
-  .birds-layer{opacity:.33}
-  .frame-a,.frame-b,.frame-c{opacity:.08}
+  .guest-panel{padding:15px 14px 17px;border-radius:18px}
+  .form-title{font-size:1.35rem}
+  .form-field textarea{min-height:78px}
+  .frame-a,.frame-b,.frame-c,.birds-layer,.motion-layer{opacity:.05}
 }
-@media (max-height:660px){
-  .intro-heading{display:none}
-  .intro-stage{gap:18px}
+@media (max-height:720px) and (min-width:768px){
+  :root{--env-w:clamp(300px,46vw,520px)}
+  .intro-stage{gap:14px;padding-top:20px;padding-bottom:20px}
+  .envelope-wrap{min-height:clamp(250px,42vw,470px)}
+  .guest-panel{padding:14px 16px;max-width:540px}
+  .form-field textarea{min-height:62px}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
@@ -319,8 +236,6 @@ body.fade-out{opacity:0;pointer-events:none}
 <body>
 
 <div class="bg-layer" aria-hidden="true"></div>
-
-<!-- Decoration layers -->
 <img class="decor-layer frame-a" src="./assets/overlay-frame-01.png" alt="" aria-hidden="true" />
 <img class="decor-layer frame-b" src="./assets/overlay-frame-02.png" alt="" aria-hidden="true" />
 <img class="decor-layer frame-c" src="./assets/overlay-frame-03.png" alt="" aria-hidden="true" />
@@ -328,29 +243,38 @@ body.fade-out{opacity:0;pointer-events:none}
 <img class="decor-layer birds-layer" src="./assets/birds-sparkle-overlay.png" alt="" aria-hidden="true" />
 
 <main class="intro-stage">
-  <div class="intro-heading">
-    <span class="eyebrow">The Wedding Of</span>
-    <h1 class="couple-names">Akkharaphon <span class="amp">&amp;</span> Mantana</h1>
-    <span class="date-line">28 · 07 · 2026</span>
-  </div>
-
   <section class="envelope-zone" aria-label="Wedding invitation envelope">
     <div class="glow" aria-hidden="true"></div>
     <div class="sparkle-burst" aria-hidden="true"></div>
-
     <div class="envelope-wrap">
       <img class="env env-closed" src="./assets/envelope-closed.png" alt="ซองการ์ดเชิญ" />
-      <img class="env env-open" src="./assets/envelope-open.png" alt="ซองการ์ดเชิญเปิด" />
+      <img class="env env-open" src="./assets/envelope-open-transparent.png" alt="ซองการ์ดเชิญเปิด" />
     </div>
   </section>
 
   <button id="openBtn" class="open-btn" type="button">Open Invitation</button>
+
+  <form id="guestForm" class="guest-panel" autocomplete="on">
+    <h1 class="form-title">Akkharaphon &amp; Mantana</h1>
+    <p class="form-sub">กรุณาใส่ชื่อผู้ร่วมงานและคำอวยพรก่อนเข้าสู่การ์ดเชิญ</p>
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="guestName">ชื่อผู้ร่วมงาน</label>
+        <input id="guestName" name="guestName" type="text" placeholder="เช่น คุณสมชาย และครอบครัว" required />
+      </div>
+      <div class="form-field">
+        <label for="guestWish">คำอวยพร</label>
+        <textarea id="guestWish" name="guestWish" placeholder="เขียนคำอวยพรให้คู่บ่าวสาว" required></textarea>
+      </div>
+    </div>
+    <button class="enter-btn" type="submit">Enter Invitation</button>
+    <p class="form-note">ระบบจะบันทึกข้อมูลไว้ในเครื่องของผู้เปิด แล้วไปหน้าหลัก</p>
+  </form>
 </main>
 
 <noscript>
   <p style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#081A3D;color:#F7F4EC;font-family:sans-serif;padding:20px;text-align:center;">
-    กรุณาเปิด JavaScript เพื่อดูการ์ดเชิญ หรือ
-    <a href="./main.html" style="color:#D4AF37;margin-left:6px;">คลิกที่นี่เพื่อเข้าสู่การ์ดเชิญ</a>
+    กรุณาเปิด JavaScript เพื่อใช้งานหน้าแรก หรือ <a href="./main.html" style="color:#D4AF37;margin-left:6px;">คลิกที่นี่เพื่อเข้าสู่การ์ดเชิญ</a>
   </p>
 </noscript>
 
@@ -358,28 +282,41 @@ body.fade-out{opacity:0;pointer-events:none}
 (function(){
   "use strict";
 
-  var HOLD_MS = 5000; // ซองเปิดค้าง 5 วินาที
-  var FADE_MS = 850;  // เฟดก่อนเข้า main.html
-
+  var OPEN_ANIMATION_MS = 1100;
+  var FADE_MS = 850;
   var body = document.body;
   var openBtn = document.getElementById("openBtn");
+  var guestForm = document.getElementById("guestForm");
+  var guestName = document.getElementById("guestName");
+  var guestWish = document.getElementById("guestWish");
   var opened = false;
 
   openBtn.addEventListener("click", function(){
     if (opened) return;
     opened = true;
-
     body.classList.add("opening");
-
     setTimeout(function(){
-      body.classList.add("fade-out");
-      setTimeout(function(){
-        window.location.href = "main.html";
-      }, FADE_MS);
-    }, HOLD_MS);
+      body.classList.add("show-form");
+      guestName.focus({preventScroll:true});
+    }, OPEN_ANIMATION_MS);
+  });
+
+  guestForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = guestName.value.trim();
+    var wish = guestWish.value.trim();
+    if (!name || !wish) return;
+
+    localStorage.setItem("weddingGuestName", name);
+    localStorage.setItem("weddingGuestWish", wish);
+    localStorage.setItem("weddingGuestSubmittedAt", new Date().toISOString());
+
+    body.classList.add("fade-out");
+    setTimeout(function(){
+      window.location.href = "main.html";
+    }, FADE_MS);
   });
 })();
 </script>
-
 </body>
 </html>
