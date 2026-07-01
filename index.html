@@ -282,13 +282,6 @@ body.fade-out{opacity:0;pointer-events:none}
 (function(){
   "use strict";
 
-  /*
-    ==================================================
-    PRODUCTION CONFIG
-    ==================================================
-    วาง Google Apps Script Web App URL ตรงนี้
-    URL เดียวกับที่ใช้ใน admin-wishes.html
-  */
   const WISH_API_URL = "https://script.google.com/macros/s/AKfycby4UJM00cV1fBLEAEoNTOXcju1orersFTZbRBOjDDLjpaZk6r-p0GGZ2-P485i4RFXZNw/exec";
 
   const OPEN_ANIMATION_MS = 1100;
@@ -304,10 +297,6 @@ body.fade-out{opacity:0;pointer-events:none}
   let opened = false;
   let submitting = false;
 
-  function isConfigured(){
-    return WISH_API_URL && !WISH_API_URL.includes("PUT_GOOGLE_APPS_SCRIPT");
-  }
-
   function setStatus(message){
     if(formStatus) formStatus.textContent = message;
   }
@@ -317,6 +306,38 @@ body.fade-out{opacity:0;pointer-events:none}
     setTimeout(function(){
       window.location.href = "main.html";
     }, FADE_MS);
+  }
+
+  function sendWishByImage(name, wish){
+    const params = new URLSearchParams({
+      action: "submit",
+      guestName: name,
+      wishMessage: wish,
+      source: "index.html",
+      t: Date.now().toString()
+    });
+
+    const img = new Image();
+    img.onload = function(){
+      setStatus("ส่งคำอวยพรแล้ว กำลังเข้าสู่หน้าหลัก...");
+      setTimeout(goMain, 350);
+    };
+    img.onerror = function(){
+      /*
+        Google Apps Script มัก redirect/ตอบเป็น script จึงอาจยิง onerror ใน browser บางตัว
+        แต่ request ถูกส่งไปแล้ว จึงให้ไปหน้าหลักต่อ
+      */
+      setStatus("ส่งคำอวยพรแล้ว กำลังเข้าสู่หน้าหลัก...");
+      setTimeout(goMain, 350);
+    };
+
+    img.src = WISH_API_URL + "?" + params.toString();
+
+    // fallback กัน browser ค้าง
+    setTimeout(function(){
+      setStatus("กำลังเข้าสู่หน้าหลัก...");
+      goMain();
+    }, 1800);
   }
 
   openBtn.addEventListener("click", function(){
@@ -343,11 +364,6 @@ body.fade-out{opacity:0;pointer-events:none}
       return;
     }
 
-    if (!isConfigured()) {
-      setStatus("ยังไม่ได้ตั้งค่า Google Apps Script URL กรุณาติดต่อเจ้าภาพ");
-      return;
-    }
-
     submitting = true;
     setStatus("กำลังส่งคำอวยพร...");
 
@@ -355,22 +371,7 @@ body.fade-out{opacity:0;pointer-events:none}
     localStorage.setItem("weddingGuestWish", wish);
     localStorage.setItem("weddingGuestSubmittedAt", new Date().toISOString());
 
-    fetch(WISH_API_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: new URLSearchParams({
-        action: "submit",
-        guestName: name,
-        wishMessage: wish,
-        source: "index.html"
-      })
-    }).finally(function(){
-      setStatus("ส่งคำอวยพรแล้ว กำลังเข้าสู่หน้าหลัก...");
-      setTimeout(goMain, 450);
-    });
+    sendWishByImage(name, wish);
   });
 })();
 </script>

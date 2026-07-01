@@ -610,14 +610,6 @@ body.presentation.show-ui .mini-toolbar{opacity:.46}
 (function(){
   "use strict";
 
-  /*
-    ==================================================
-    PRODUCTION CONFIG
-    ==================================================
-    1) วาง URL จาก Google Apps Script Web App ตรง WISH_API_URL
-    2) ADMIN_KEY ต้องตรงกับไฟล์ Google Apps Script
-    3) ถ้ายังไม่ใส่ URL จะไม่ดึงข้อมูลและจะแจ้งให้ตั้งค่าก่อนใช้งาน
-  */
   const WISH_API_URL = "https://script.google.com/macros/s/AKfycby4UJM00cV1fBLEAEoNTOXcju1orersFTZbRBOjDDLjpaZk6r-p0GGZ2-P485i4RFXZNw/exec";
   const ADMIN_KEY = "AM28072026";
 
@@ -658,15 +650,45 @@ body.presentation.show-ui .mini-toolbar{opacity:.46}
   const confirmDelete = document.getElementById("confirmDelete");
   const toast = document.getElementById("toast");
 
-  function isConfigured(){
-    return WISH_API_URL && !WISH_API_URL.includes("PUT_GOOGLE_APPS_SCRIPT");
-  }
-
   function setStatus(mode, text){
     statusDot.classList.remove("wait","err");
     if(mode === "wait") statusDot.classList.add("wait");
     if(mode === "error") statusDot.classList.add("err");
     statusText.textContent = text;
+  }
+
+  function jsonp(params){
+    return new Promise(function(resolve, reject){
+      const callbackName = "__amWeddingCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      const query = new URLSearchParams(params);
+      query.set("callback", callbackName);
+      query.set("t", Date.now().toString());
+
+      const script = document.createElement("script");
+      const timer = setTimeout(function(){
+        cleanup();
+        reject(new Error("Request timeout"));
+      }, 12000);
+
+      function cleanup(){
+        clearTimeout(timer);
+        delete window[callbackName];
+        if(script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[callbackName] = function(data){
+        cleanup();
+        resolve(data);
+      };
+
+      script.onerror = function(){
+        cleanup();
+        reject(new Error("JSONP load failed"));
+      };
+
+      script.src = WISH_API_URL + "?" + query.toString();
+      document.body.appendChild(script);
+    });
   }
 
   function normalizeRows(rows){
@@ -698,19 +720,12 @@ body.presentation.show-ui .mini-toolbar{opacity:.46}
   }
 
   async function loadWishes(){
-    if(!isConfigured()){
-      wishes = [];
-      setStatus("error", "Config");
-      refreshText.textContent = "ยังไม่ได้ใส่ WISH_API_URL";
-      emptyMessage.textContent = "กรุณาใส่ Google Apps Script Web App URL ในไฟล์ admin-wishes.html ก่อนใช้งานจริง";
-      render();
-      return;
-    }
-
     try{
-      const url = WISH_API_URL + "?action=list&key=" + encodeURIComponent(ADMIN_KEY) + "&t=" + Date.now();
-      const res = await fetch(url, {method:"GET", cache:"no-store"});
-      const json = await res.json();
+      setStatus("wait", "Loading");
+      const json = await jsonp({
+        action: "list",
+        key: ADMIN_KEY
+      });
 
       if(json.status !== "success"){
         throw new Error(json.message || "API error");
@@ -719,13 +734,17 @@ body.presentation.show-ui .mini-toolbar{opacity:.46}
       wishes = normalizeRows(json.data || json.rows || []);
       setStatus("online", "Online");
       refreshText.textContent = "อัปเดต " + new Date().toLocaleTimeString("th-TH");
-      emptyMessage.textContent = "รอข้อมูลจาก Google Sheet เมื่อแขกส่งคำอวยพรเข้ามา ระบบจะแสดงวนบนจอ TV ให้อัตโนมัติ";
+      if(emptyMessage){
+        emptyMessage.textContent = "รอข้อมูลจาก Google Sheet เมื่อแขกส่งคำอวยพรเข้ามา ระบบจะแสดงวนบนจอ TV ให้อัตโนมัติ";
+      }
       render();
     }catch(err){
       console.error(err);
       setStatus("error", "Error");
       refreshText.textContent = "โหลดข้อมูลไม่สำเร็จ";
-      emptyMessage.textContent = "ไม่สามารถโหลดข้อมูลจาก Google Sheet ได้ กรุณาตรวจสอบ URL, สิทธิ์ Web App และ ADMIN_KEY";
+      if(emptyMessage){
+        emptyMessage.textContent = "ไม่สามารถโหลดข้อมูลจาก Google Sheet ได้ กรุณาตรวจสอบ Apps Script Deploy เป็นเวอร์ชันล่าสุด";
+      }
       render();
       showToast("โหลดข้อมูลไม่สำเร็จ");
     }
@@ -811,15 +830,11 @@ body.presentation.show-ui .mini-toolbar{opacity:.46}
   }
 
   async function clearAll(){
-    if(!isConfigured()){
-      showToast("ยังไม่ได้ตั้งค่า WISH_API_URL");
-      return;
-    }
-
     try{
-      const url = WISH_API_URL + "?action=clear&key=" + encodeURIComponent(ADMIN_KEY) + "&t=" + Date.now();
-      const res = await fetch(url, {method:"GET", cache:"no-store"});
-      const json = await res.json();
+      const json = await jsonp({
+        action: "clear",
+        key: ADMIN_KEY
+      });
 
       if(json.status !== "success"){
         throw new Error(json.message || "Clear failed");

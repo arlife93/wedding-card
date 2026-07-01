@@ -1,16 +1,14 @@
 /*
-  Google Apps Script for Wedding Wishes
-  ใช้กับ index.html และ admin-wishes.html
+  A&M Wedding Wishes API
+  Version: JSONP fixed for GitHub Pages / local HTML
 
-  วิธีใช้:
-  1) เปิด Google Sheet ใหม่
-  2) Extensions > Apps Script
-  3) วางโค้ดนี้
-  4) แก้ ADMIN_KEY ให้ตรงกับ index.html/admin-wishes.html
-  5) Deploy > New deployment > Web app
-     - Execute as: Me
-     - Who has access: Anyone
-  6) Copy Web App URL ไปวางใน WISH_API_URL ของ index.html และ admin-wishes.html
+  ใช้งาน:
+  - index.html ส่งคำอวยพรด้วย GET action=submit
+  - admin-wishes.html อ่านข้อมูลด้วย JSONP action=list
+  - admin-wishes.html ลบข้อมูลด้วย JSONP action=clear
+
+  หลังวางโค้ดนี้ใน Apps Script แล้วต้อง:
+  Deploy > Manage deployments > Edit > Version: New version > Deploy
 */
 
 const SHEET_NAME = "Wishes";
@@ -18,6 +16,10 @@ const ADMIN_KEY = "AM28072026";
 
 function doGet(e) {
   const action = String((e && e.parameter && e.parameter.action) || "list").toLowerCase();
+
+  if (action === "submit") {
+    return handleSubmit(e);
+  }
 
   if (action === "list") {
     return handleList(e);
@@ -27,7 +29,7 @@ function doGet(e) {
     return handleClear(e);
   }
 
-  return jsonOutput({
+  return output(e, {
     status: "error",
     message: "Unknown action"
   });
@@ -40,7 +42,7 @@ function doPost(e) {
     return handleSubmit(e);
   }
 
-  return jsonOutput({
+  return output(e, {
     status: "error",
     message: "Unknown action"
   });
@@ -48,13 +50,13 @@ function doPost(e) {
 
 function handleSubmit(e) {
   const sheet = getSheet();
-  const p = e.parameter || {};
+  const p = (e && e.parameter) || {};
 
   const guestName = cleanText(p.guestName || p.name || "");
   const wishMessage = cleanText(p.wishMessage || p.guestWish || p.wish || "");
 
   if (!guestName || !wishMessage) {
-    return jsonOutput({
+    return output(e, {
       status: "error",
       message: "Missing guestName or wishMessage"
     });
@@ -64,17 +66,17 @@ function handleSubmit(e) {
     new Date(),
     guestName,
     wishMessage,
-    String(p.source || "index.html")
+    cleanText(p.source || "index.html")
   ]);
 
-  return jsonOutput({
+  return output(e, {
     status: "success"
   });
 }
 
 function handleList(e) {
   if (!isAdmin(e)) {
-    return jsonOutput({
+    return output(e, {
       status: "error",
       message: "Unauthorized"
     });
@@ -84,7 +86,7 @@ function handleList(e) {
   const values = sheet.getDataRange().getValues();
 
   if (values.length <= 1) {
-    return jsonOutput({
+    return output(e, {
       status: "success",
       data: []
     });
@@ -103,7 +105,7 @@ function handleList(e) {
       };
     });
 
-  return jsonOutput({
+  return output(e, {
     status: "success",
     data: data
   });
@@ -111,7 +113,7 @@ function handleList(e) {
 
 function handleClear(e) {
   if (!isAdmin(e)) {
-    return jsonOutput({
+    return output(e, {
       status: "error",
       message: "Unauthorized"
     });
@@ -124,7 +126,7 @@ function handleClear(e) {
     sheet.deleteRows(2, lastRow - 1);
   }
 
-  return jsonOutput({
+  return output(e, {
     status: "success"
   });
 }
@@ -148,6 +150,7 @@ function ensureHeader(sheet) {
   }
 
   const headers = sheet.getRange(1, 1, 1, 4).getValues()[0];
+
   if (headers[0] !== "Timestamp" || headers[1] !== "Guest Name" || headers[2] !== "Wish") {
     sheet.getRange(1, 1, 1, 4).setValues([["Timestamp", "Guest Name", "Wish", "Source"]]);
   }
@@ -165,8 +168,22 @@ function cleanText(value) {
     .slice(0, 1500);
 }
 
-function jsonOutput(obj) {
+function output(e, obj) {
+  const callback = cleanCallback((e && e.parameter && e.parameter.callback) || "");
+
+  if (callback) {
+    return ContentService
+      .createTextOutput(callback + "(" + JSON.stringify(obj) + ");")
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function cleanCallback(value) {
+  const cb = String(value || "").trim();
+  if (!cb) return "";
+  return cb.replace(/[^a-zA-Z0-9_$\.]/g, "").slice(0, 120);
 }
